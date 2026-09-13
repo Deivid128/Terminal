@@ -129,9 +129,9 @@ const delayCommands = {
 
     _DELAYS: () => {
         terminal.createNewElement("Mostrando os objetos 'delay' salvos...");
-        
+
         terminal.createNewElement(W2_line);
-        
+
         const ln = terminal.delay.delays.length
         terminal.createNewElement(`Quantidade existence: ${ln}`);
         if (ln > 0) terminal.createNewElement(BAR_line);
@@ -142,10 +142,7 @@ const delayCommands = {
             terminal.createNewElement(` Diferença: ${terminal.delay.delays[i].unixDiference} `);
             terminal.createNewElement(` Tempo de 0 -> 1: ${terminal.delay.delays[i].time} `);
             console.log(i);
-            
-            if (ln > 1 && i+1 !== ln) {terminal.createNewElement(W1_line)
-                  console.log(i);
-                ;}
+            if (ln > 1 && i + 1 !== ln) terminal.createNewElement(W1_line);
         };
 
         terminal.createNewElement(W2_line);
