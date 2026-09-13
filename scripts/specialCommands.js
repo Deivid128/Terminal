@@ -133,7 +133,7 @@ const delayCommands = {
         terminal.createNewElement(W2_line);
 
         const ln = terminal.delay.delays.length
-        terminal.createNewElement(`Quantidade existence: ${ln}`);
+        terminal.createNewElement(`Quantidade existente: ${ln}`);
         if (ln > 0) terminal.createNewElement(BAR_line);
 
         for (let i = 0; i < ln; i++) {

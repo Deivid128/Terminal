@@ -86,7 +86,8 @@ class Terminal {
             }
 
             if (key && !(key in dateCommands)) return;
-
+            if (key === "_DATE") return;
+        
             if (key === "help") {
                 dateCommands.help();
                 return;
