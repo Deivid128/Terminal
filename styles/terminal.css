@@ -1,0 +1,82 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+
+    gap: 5px;
+    background-color: black;
+
+    min-height: 100vh;
+}
+
+.commands {
+    min-width: 100vw;
+    height: 98vh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: top;
+    align-items: left;
+
+    gap: 2px;
+
+    overflow-y: auto;
+    scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+}
+
+.commandElement {
+    display: flex;
+    justify-self: left;
+    align-self: left;
+    justify-content: center;
+    align-items: center;
+}
+
+.elements {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+
+    gap: 2px;
+}
+
+.commands,
+.writer,
+.element {
+    color: lime;
+    background: none;
+
+    /* font-family: Georgia, "Times New Roman", Times, serif; */
+    font-family: cursive;
+    font-size: 18px;
+}
+
+.writer,
+.element {
+    white-space: pre-wrap;
+    word-break: break-all;
+    overflow-wrap: break-word;
+
+    resize: none;
+    border: none;
+
+    min-width: 96vw;
+}
+
+.writer:focus,
+.element:focus {
+    outline: none;
+}
+
+.writer::-webkit-scrollbar {
+    display: none;
+}
+
+.writer::-webkit-resizer {
+    display: none;
+}

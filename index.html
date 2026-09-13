@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Terminal</title>
+
+        <link rel="stylesheet" href="styles/main.css" />
+        <link rel="stylesheet" href="styles/terminal.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div class="commands" id="commands">
+
+                <div class="elements" id="elements">
+
+                    <div class="commandElement alreadyUsed" id="commandElement">
+                        <span>C:\> </span>
+                        <input
+                        type="text"
+                        id="element"
+                        class="element"
+                        readonly
+                        value='Digite "help" para ver os comandos'
+                        />
+                    </div>
+
+                </div>
+
+                <div class="commandElement" id="digit">
+                    <span>C:\> </span>
+                    <input type="text" class="writer" id="writer" />
+                </div>
+
+            </div>
+        </div>
+
+        <script src="scripts/helps.js"></script>
+        <script src="scripts/specialCommands.js"></script>
+        <script src="scripts/terminal.js"></script>
+    </body>
+</html>
