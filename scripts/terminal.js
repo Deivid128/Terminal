@@ -6,7 +6,7 @@ class Terminal {
     constructor() {
         this.backgroundColor = "black";
         this.textColor = "lime";
-        this.version = "0.0.8";
+        this.version = "0.1.0";
         this.files = {};
         this.delay = {
             start: 0,
@@ -137,8 +137,12 @@ class Terminal {
         },
 
         delay: (type) => {
-            if (!(type in delayCommands)) return;
-            if (type === "_delays") return;
+            if (type && !(type in delayCommands)) return;
+            if (type === "_DELAYS") return;
+            if (!type || type === "") {
+                delayCommands["_DELAYS"]();
+                return;
+            };
             if (type) delayCommands[type]();
         },
     }

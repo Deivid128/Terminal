@@ -8,7 +8,7 @@ const help = [
     { name: "textcolor", description: "altera a cor do texto" },
     { name: "version", description: "mostra a versão atual do terminal" },
     { name: "h/nasa", description: "??????" },
-    { name: "delay", description: "cria um delay entre 'start' e 'end' retornando a diferença e um tempo H/M/S" },
+    { name: "delay", description: "cria um delay entre 'start' e 'end' retornando a diferença e um tempo H/M/S (Individuais)" },
 ];
 
 const backgroundHelp = [
