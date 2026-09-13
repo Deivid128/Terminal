@@ -74,7 +74,7 @@ const dateCommands = {
 const delayCommands = {
     start: () => {
         if (terminal.delay.start) {
-            terminal.createNewElement(` Você já tem um tempo iniciado. Digite 'delay end' para resetar <`);
+            terminal.createNewElement(` Você já tem um tempo iniciado. Digite 'delay end' para resetar`);
             return;
         };
 
@@ -83,11 +83,14 @@ const delayCommands = {
     },
 
     end: () => {
-        if (!terminal.delay.start) return;
+        if (!terminal.delay.start) {
+            terminal.createNewElement(` Não a um tempo iniciado. Digite 'delay start' para começar`);
+            return;
+        };
         const end = Number(dateCommands.unix());
 
         terminal.createNewElement(W2_line);
-
+        
         terminal.createNewElement(` Tempo 1, salvo: ${end} <`);
         terminal.createNewElement(` Calculando...`);
 
