@@ -97,17 +97,8 @@ const delayCommands = {
         let minutes = String(Math.floor(Number(seconds) / 60)).padStart(2, "0");
         let hours = String(Math.floor(Number(minutes) / 60)).padStart(2, "0");
 
-        if (seconds >= 60) {
-            for (let i = 0; Math.floor(seconds / 60); i++) {
-                seconds -= 60;
-            };
-        };
-
-        if (minutes >= 60) {
-            for (let i = 0; Math.floor(minutes / 60); i++) {
-                minutes -= 60;
-            };
-        };
+        if (seconds >= 60) seconds %= 60;
+        if (minutes >= 60) minutes %= 60;
 
         terminal.createNewElement(` Diferança: ${diference} <`);
         terminal.createNewElement(` Tempo de 0 -> 1. Horas: ${hours}; Minutos: ${minutes}; Segundos: ${seconds} <`);
