@@ -93,15 +93,19 @@ const delayCommands = {
 
         const diference = end - terminal.delay.start;
 
-        let seconds = String(Math.floor(diference / 1000)).padStart(2, "0");
-        let minutes = String(Math.floor(Number(seconds) / 60)).padStart(2, "0");
-        let hours = String(Math.floor(Number(minutes) / 60)).padStart(2, "0");
+        let seconds = Math.floor(diference / 1000);
+        let minutes = Math.floor(seconds / 60);
+        let hours = Math.floor(minutes / 60);
 
-        if (seconds >= 60) seconds %= 60;
-        if (minutes >= 60) minutes %= 60;
+        seconds %= 60;
+        minutes %= 60;
+
+        const formattedSeconds = String(seconds).padStart(2, "0");
+        const formattedMinutes = String(minutes).padStart(2, "0");
+        const formattedHours = String(hours).padStart(2, "0");
 
         terminal.createNewElement(` Diferança: ${diference} <`);
-        terminal.createNewElement(` Tempo de 0 -> 1. Horas: ${hours}; Minutos: ${minutes}; Segundos: ${seconds} <`);
+        terminal.createNewElement(` Tempo de 0 -> 1. Horas: ${formattedHours}; Minutos: ${formattedMinutes}; Segundos: ${formattedSeconds} <`);
 
         terminal.createNewElement(W2_line);
 
