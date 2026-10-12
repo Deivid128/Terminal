@@ -6,11 +6,86 @@ class Terminal {
     constructor() {
         this.backgroundColor = "black";
         this.textColor = "lime";
-        this.version = "0.1.0";
+        this.version = "0.1.6";
         this.files = {};
         this.delay = {
             start: 0,
             delays: [],
+        };
+        this.morseCode = {
+            cripted: {
+                ["A"]: ".-",
+                ["B"]: "-...",
+                ["C"]: "-.-.",
+                ["D"]: "-..",
+                ["E"]: ".",
+                ["F"]: "..-.",
+                ["G"]: "--.",
+                ["H"]: "....",
+                ["I"]: "..",
+                ["J"]: ".---",
+                ["K"]: "-.-",
+                ["L"]: ".-..",
+                ["M"]: "--",
+                ["N"]: "-.",
+                ["O"]: "---",
+                ["P"]: ".--.",
+                ["Q"]: "--.-",
+                ["R"]: ".-.",
+                ["S"]: "...",
+                ["T"]: "-",
+                ["U"]: "..-",
+                ["V"]: "...-",
+                ["W"]: ".--",
+                ["X"]: "-..-",
+                ["Y"]: "-.--",
+                ["Z"]: "--..",
+                [" "]: "/",
+                ["?"]: "..--..",
+                ["!"]: "-.-.--",
+                [":"]: "---...",
+                [`'`]: ".----.",
+                [`"`]: ".-..-.",
+                ["."]: ".-.-.-",
+                [","]: "--..--",
+            },
+
+            decripted: {
+                [".-"]: "A",
+                ["-..."]: "B",
+                ["-.-."]: "C",
+                ["-.."]: "D",
+                ["."]: "E",
+                ["..-."]: "F", 
+                ["--."]: "G",
+                ["...."]: "H",
+                [".."]: "I",
+                [".---"]: "J",
+                ["-.-"]: "K",
+                [".-.."]: "L",
+                ["--"]: "M",
+                ["-."]: "N",
+                ["---"]: "O",
+                [".--."]: "P",
+                ["--.-"]: "Q",
+                [".-."]: "R",
+                ["..."]: "S",
+                ["-"]: "T",
+                ["..-"]: "U",
+                ["...-"]: "V",
+                [".--"]: "W",
+                ["-..-"]: "X",
+                ["-.--"]: "Y",
+                ["--.."]: "Z",
+                ["/"]: " ",
+                ["---..."]: ":",
+                [".----."]: "'",
+                [".-..-."]: `"`,
+                ["..--.."]: "?",
+                ["-.-.--"]: "!",
+                [".-.-.-"]: ".",
+                ["--..--"]: `,`,
+            },
         };
     }
 
@@ -62,12 +137,7 @@ class Terminal {
         clear: () => terminal.clearElements(),
 
         help: () => {
-            const line = "======================================================";
-            terminal.createNewElement(line);
-            for (let i of help) {
-                terminal.createNewElement(` -"${i.name}"- ${i.description}`);
-            };
-            terminal.createNewElement(line);
+            helpsHandler("default", "help");
         },
 
         background: (att, ...params) => {
@@ -87,7 +157,7 @@ class Terminal {
 
             if (key && !(key in dateCommands)) return;
             if (key === "_DATE") return;
-        
+
             if (key === "help") {
                 dateCommands.help();
                 return;
@@ -129,7 +199,7 @@ class Terminal {
 
             function handler() {
                 const animFrame = requestAnimationFrame(handler);
-                if (i === 1000) cancelAnimationFrame(animFrame);
+                if (i === 500) cancelAnimationFrame(animFrame);
                 terminal.createNewElement(`${dateCommands.fulltime()} || ${binary()} || ${dateCommands.unix()} `);
                 i++;
             }
@@ -145,6 +215,14 @@ class Terminal {
                 return;
             };
             if (type) delayCommands[type]();
+        },
+
+        morse: (act, ...text) => {
+            if (act in morseCommands) {
+
+
+                morseCommands[act](text);
+            };
         },
     }
 }

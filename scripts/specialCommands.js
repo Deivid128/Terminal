@@ -2,6 +2,35 @@ const W2_line = "======================================================";
 const W1_line = "------------------------------------------------------";
 const BAR_line = "//////////////////////////////////////////////////////";
 
+const helpsCommands = {
+    default: (helpM) => {
+        for (let i of helpM) {
+            if (i.type in types) {
+                types[i.type](i);
+            };
+        };
+    },
+};
+
+const types = {
+    command: (i) => {
+        terminal.createNewElement(` -"${i.name}"- ${i.description}`);
+    },
+    warnM: (i) => {
+        terminal.createNewElement(` - ${i.description} -`);
+    },
+};
+
+function helpsHandler(helpt, helpM) {
+    terminal.createNewElement(W2_line);
+
+    if (helpt in helpsCommands) {
+        helpsCommands[helpt](helps[helpM]);
+    };
+
+    terminal.createNewElement(W2_line);
+}
+
 const backgroundCommands = {
     color: (color) => {
         terminal.backgroundColor = color || "black";
@@ -9,11 +38,7 @@ const backgroundCommands = {
     },
 
     help: () => {
-        terminal.createNewElement(W2_line);
-        for (let i of backgroundHelp) {
-            terminal.createNewElement(` -"${i.name}"- ${i.description}`);
-        };
-        terminal.createNewElement(W2_line);
+        helpsHandler("default", "backgroundHelp");
     }
 }
 
@@ -63,11 +88,7 @@ const dateCommands = {
     },
 
     help: () => {
-        terminal.createNewElement(W2_line);
-        for (let i of dateHelp) {
-            terminal.createNewElement(` -"${i.name}"- ${i.description}`);
-        };
-        terminal.createNewElement(W2_line);
+        helpsHandler("default", "dateHelp");
     },
 }
 
@@ -90,7 +111,7 @@ const delayCommands = {
         const end = Number(dateCommands.unix());
 
         terminal.createNewElement(W2_line);
-        
+
         terminal.createNewElement(` Tempo 1, salvo: ${end} <`);
         terminal.createNewElement(` Calculando...`);
 
@@ -139,10 +160,63 @@ const delayCommands = {
             terminal.createNewElement(` End (1): ${terminal.delay.delays[i].end} `);
             terminal.createNewElement(` Diferença: ${terminal.delay.delays[i].unixDiference} `);
             terminal.createNewElement(` Tempo de 0 -> 1: ${terminal.delay.delays[i].time} `);
-            console.log(i);
             if (ln > 1 && i + 1 !== ln) terminal.createNewElement(W1_line);
         };
 
         terminal.createNewElement(W2_line);
+    },
+}
+
+const morseCommands = {
+    encrypt: (text) => {
+        let newText = "";
+        for (let i in text) {
+            const splited = text[i].split("");
+
+            if (i != 0) {
+                newText += " / ";
+            };
+
+            for (let j in splited) {
+                let coded = terminal.morseCode.cripted[splited[j].toUpperCase()];
+                if (!coded | coded === "undefined" | coded === undefined) coded = "irreconhecivel";
+
+                if (j == 0) {
+                    newText += coded;
+                    continue;
+                };
+                newText += " " + coded;
+            };
+        };
+
+        terminal.createNewElement(` ${newText} <`);
+    },
+
+    decrypt: (text) => {
+        let newText = "";
+        for (let i in text) {
+            const splited = text[i];
+
+            let coded = terminal.morseCode.decripted[splited];
+            if (!coded | coded === "undefined" | coded === undefined) coded = "irreconhecivel";
+
+            if (i == 0) {
+                newText += coded;
+                continue;
+            };
+            newText += coded;
+        };
+
+        terminal.createNewElement(` ${newText} <`);
+    },
+
+    help: () => {
+        helpsHandler("default", "morseHelp");
+    },
+
+    codes: () => {
+        for (let i in terminal.morseCode.cripted) {
+            terminal.createNewElement(` " ${i} " = '${terminal.morseCode.cripted[i]}'`);
+        };
     },
 }
