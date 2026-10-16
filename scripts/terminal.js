@@ -1,4 +1,3 @@
-const commander = document.getElementById("writer");
 const commandsArea = document.getElementById("commands");
 const elementsArea = document.getElementById("elements");
 
@@ -6,12 +5,23 @@ class Terminal {
     constructor() {
         this.backgroundColor = "black";
         this.textColor = "lime";
-        this.version = "0.1.6";
-        this.files = {};
+        this.version = "0.1.7 ";
+
+        this.files = {
+            default: {
+                alreadyUseds: [
+                    this.createNewElement("default", 'Digite "help" para ver os comandos'),
+                ],
+                currentWriter: this.#createWriter("default"),
+                name: "default",
+            }
+        };
+
         this.delay = {
             start: 0,
             delays: [],
         };
+
         this.morseCode = {
             cripted: {
                 ["A"]: ".-",
@@ -48,6 +58,16 @@ class Terminal {
                 [`"`]: ".-..-.",
                 ["."]: ".-.-.-",
                 [","]: "--..--",
+                ["0"]: "-----",
+                ["1"]: ".----",
+                ["2"]: "..---",
+                ["3"]: "...--",
+                ["4"]: "....-",
+                ["5"]: ".....",
+                ["6"]: "----.",
+                ["7"]: "---..",
+                ["8"]: "--...",
+                ["9"]: "----.",
             },
 
             decripted: {
@@ -56,7 +76,7 @@ class Terminal {
                 ["-.-."]: "C",
                 ["-.."]: "D",
                 ["."]: "E",
-                ["..-."]: "F", 
+                ["..-."]: "F",
                 ["--."]: "G",
                 ["...."]: "H",
                 [".."]: "I",
@@ -85,8 +105,26 @@ class Terminal {
                 ["-.-.--"]: "!",
                 [".-.-.-"]: ".",
                 ["--..--"]: `,`,
+                ["-----"]: "0",
+                [".----"]: "1",
+                ["..---"]: "2",
+                ["...--"]: "3",
+                ["....-"]: "4",
+                ["....."]: "5",
+                ["----."]: "6",
+                ["---.."]: "7",
+                ["--..."]: "8",
+                ["----."]: "9",
             },
         };
+
+        this.setFile("default");
+    }
+
+    currentFile = {};
+
+    setFile(fileName) {
+        this.currentFile = this.files[fileName];
     }
 
     commandsHandler(s = "") {
@@ -97,7 +135,30 @@ class Terminal {
         };
     }
 
-    createNewElement(s) {
+    #createWriter(fileName) {
+        const writerN = document.createElement("div");
+        writerN.classList.add("commandElement");
+        writerN.id = "digit";
+
+        const span = document.createElement("span");
+        span.textContent = `C:\\${fileName == "default" ? "" : fileName}>`;
+        span.style.color = this.textColor;
+
+        const input = document.createElement("input");
+        input.classList.add("writer");
+        input.id = "writer";
+        input.type = "text";
+
+        writerN.appendChild(span);
+        writerN.appendChild(input);
+
+        commandsArea.appendChild(writerN);
+        commandsArea.scrollTop = commandsArea.scrollHeight;
+
+        return input;
+    }
+
+    createNewElement(fileName, text) {
         const newCommandElement = document.createElement("div");
         const span = document.createElement("span");
         const input = document.createElement("input");
@@ -105,13 +166,12 @@ class Terminal {
         newCommandElement.classList.add("commandElement", "alreadyUsed");
         newCommandElement.id = "commandElement";
 
-        span.textContent = "C:\\>";
+        span.textContent = `C:\\${fileName == "default" ? "" : fileName}>`;
 
         input.classList.add("element");
-        input.id = "element";
         input.readOnly = true;
         input.type = "text";
-        input.value = s;
+        input.value = text;
 
         input.style.color = this.textColor;
         span.style.color = this.textColor;
@@ -122,7 +182,6 @@ class Terminal {
         elementsArea.appendChild(newCommandElement);
 
         commandsArea.scrollTop = commandsArea.scrollHeight;
-
     }
 
     clearElements() {
@@ -146,13 +205,17 @@ class Terminal {
             };
         },
 
-        calcev: (s = "") => {
-            terminal.createNewElement(` ${eval(s.trim())} < `);
+        calcev: (...s) => {
+            let toCalc = "";
+            for (let i of s) {
+                toCalc += i;
+            };
+            terminal.createNewElement(terminal.currentFile.name, ` ${eval(toCalc.trim())} < `);
         },
 
         date: (key) => {
             function loadToUi(s) {
-                terminal.createNewElement(` ${dateCommands[s]()} <`);
+                terminal.createNewElement(terminal.currentFile.name, ` ${dateCommands[s]()} <`);
             }
 
             if (key && !(key in dateCommands)) return;
@@ -191,7 +254,7 @@ class Terminal {
         },
 
         version: () => {
-            terminal.createNewElement(" " + terminal.version + " <");
+            terminal.createNewElement(terminal.currentFile.name, " " + terminal.version + " <");
         },
 
         ["h/nasa"]: () => {
@@ -200,7 +263,7 @@ class Terminal {
             function handler() {
                 const animFrame = requestAnimationFrame(handler);
                 if (i === 500) cancelAnimationFrame(animFrame);
-                terminal.createNewElement(`${dateCommands.fulltime()} || ${binary()} || ${dateCommands.unix()} `);
+                terminal.createNewElement(terminal.currentFile.name, `${dateCommands.fulltime()} || ${binary()} || ${dateCommands.unix()} `);
                 i++;
             }
 
@@ -219,9 +282,13 @@ class Terminal {
 
         morse: (act, ...text) => {
             if (act in morseCommands) {
-
-
                 morseCommands[act](text);
+            };
+        },
+
+        cesar: (act = "", interval, ...text) => {
+            if (act in cesarCommands) {
+                cesarCommands[act](interval, text);
             };
         },
     }
@@ -236,11 +303,11 @@ function binary() {
     ).join("");
 }
 
-commander.addEventListener("keydown", (e) => {
+terminal.files.default.currentWriter.addEventListener("keydown", (e) => {
     if (e.key !== "Enter") return;
 
-    terminal.createNewElement(commander.value, elementsArea);
-    terminal.commandsHandler(commander.value.trim());
+    terminal.createNewElement(terminal.currentFile.name, terminal.currentFile.currentWriter.value);
+    terminal.commandsHandler(terminal.currentFile.currentWriter.value.trim());
 
-    commander.value = "";
+    terminal.currentFile.currentWriter.value = "";
 });

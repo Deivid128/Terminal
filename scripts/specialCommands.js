@@ -1,35 +1,9 @@
-const W2_line = "======================================================";
 const W1_line = "------------------------------------------------------";
+const W2_line = "======================================================";
 const BAR_line = "//////////////////////////////////////////////////////";
+const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-const helpsCommands = {
-    default: (helpM) => {
-        for (let i of helpM) {
-            if (i.type in types) {
-                types[i.type](i);
-            };
-        };
-    },
-};
-
-const types = {
-    command: (i) => {
-        terminal.createNewElement(` -"${i.name}"- ${i.description}`);
-    },
-    warnM: (i) => {
-        terminal.createNewElement(` - ${i.description} -`);
-    },
-};
-
-function helpsHandler(helpt, helpM) {
-    terminal.createNewElement(W2_line);
-
-    if (helpt in helpsCommands) {
-        helpsCommands[helpt](helps[helpM]);
-    };
-
-    terminal.createNewElement(W2_line);
-}
+const regex = /[áàâãéèêíïóôõöúçñÁÀÂÃÉÈÊÍÏÓÔÕÖÚÇÑ]/;
 
 const backgroundCommands = {
     color: (color) => {
@@ -95,25 +69,25 @@ const dateCommands = {
 const delayCommands = {
     start: () => {
         if (terminal.delay.start) {
-            terminal.createNewElement(` Você já tem um tempo iniciado. Digite 'delay end' para resetar`);
+            terminal.createNewElement(terminal.currentFile.name, ` Você já tem um tempo iniciado. Digite 'delay end' para resetar`);
             return;
         };
 
         terminal.delay.start = Number(dateCommands.unix());
-        terminal.createNewElement(` Tempo 0, salvo: ${terminal.delay.start} <`);
+        terminal.createNewElement(terminal.currentFile.name, ` Tempo 0, salvo: ${terminal.delay.start} <`);
     },
 
     end: () => {
         if (!terminal.delay.start) {
-            terminal.createNewElement(` Não a um tempo iniciado. Digite 'delay start' para começar`);
+            terminal.createNewElement(terminal.currentFile.name, ` Não a um tempo iniciado. Digite 'delay start' para começar`);
             return;
         };
         const end = Number(dateCommands.unix());
 
-        terminal.createNewElement(W2_line);
+        terminal.createNewElement(terminal.currentFile.name, W2_line);
 
-        terminal.createNewElement(` Tempo 1, salvo: ${end} <`);
-        terminal.createNewElement(` Calculando...`);
+        terminal.createNewElement(terminal.currentFile.name, ` Tempo 1, salvo: ${end} <`);
+        terminal.createNewElement(terminal.currentFile.name, ` Calculando...`);
 
         const diference = end - terminal.delay.start;
 
@@ -128,10 +102,10 @@ const delayCommands = {
         const formattedMinutes = String(minutes).padStart(2, "0");
         const formattedHours = String(hours).padStart(2, "0");
 
-        terminal.createNewElement(` Diferança: ${diference} <`);
-        terminal.createNewElement(` Tempo de 0 -> 1. Horas: ${formattedHours}; Minutos: ${formattedMinutes}; Segundos: ${formattedSeconds} <`);
+        terminal.createNewElement(terminal.currentFile.name, ` Diferança: ${diference} <`);
+        terminal.createNewElement(terminal.currentFile.name, ` Tempo de 0 -> 1. Horas: ${formattedHours}; Minutos: ${formattedMinutes}; Segundos: ${formattedSeconds} <`);
 
-        terminal.createNewElement(W2_line);
+        terminal.createNewElement(terminal.currentFile.name, W2_line);
 
         const newDelayOBJ = {
             start: terminal.delay.start,
@@ -147,23 +121,23 @@ const delayCommands = {
     },
 
     _DELAYS: () => {
-        terminal.createNewElement("Mostrando os objetos 'delay' salvos...");
+        terminal.createNewElement(terminal.currentFile.name, "Mostrando os objetos 'delay' salvos...");
 
-        terminal.createNewElement(W2_line);
+        terminal.createNewElement(terminal.currentFile.name, W2_line);
 
         const ln = terminal.delay.delays.length;
-        terminal.createNewElement(`Quantidade existente: ${ln}`);
-        if (ln > 0) terminal.createNewElement(BAR_line);
+        terminal.createNewElement(terminal.currentFile.name, `Quantidade existente: ${ln}`);
+        if (ln > 0) terminal.createNewElement(terminal.currentFile.name, BAR_line);
 
         for (let i = 0; i < ln; i++) {
-            terminal.createNewElement(` Start (0): ${terminal.delay.delays[i].start} `);
-            terminal.createNewElement(` End (1): ${terminal.delay.delays[i].end} `);
-            terminal.createNewElement(` Diferença: ${terminal.delay.delays[i].unixDiference} `);
-            terminal.createNewElement(` Tempo de 0 -> 1: ${terminal.delay.delays[i].time} `);
-            if (ln > 1 && i + 1 !== ln) terminal.createNewElement(W1_line);
+            terminal.createNewElement(terminal.currentFile.name, ` Start (0): ${terminal.delay.delays[i].start} `);
+            terminal.createNewElement(terminal.currentFile.name, ` End (1): ${terminal.delay.delays[i].end} `);
+            terminal.createNewElement(terminal.currentFile.name, ` Diferença: ${terminal.delay.delays[i].unixDiference} `);
+            terminal.createNewElement(terminal.currentFile.name, ` Tempo de 0 -> 1: ${terminal.delay.delays[i].time} `);
+            if (ln > 1 && i + 1 !== ln) terminal.createNewElement(terminal.currentFile.name, W1_line);
         };
 
-        terminal.createNewElement(W2_line);
+        terminal.createNewElement(terminal.currentFile.name, W2_line);
     },
 }
 
@@ -189,7 +163,7 @@ const morseCommands = {
             };
         };
 
-        terminal.createNewElement(` ${newText} <`);
+        terminal.createNewElement(terminal.currentFile.name, ` ${newText} <`);
     },
 
     decrypt: (text) => {
@@ -207,7 +181,7 @@ const morseCommands = {
             newText += coded;
         };
 
-        terminal.createNewElement(` ${newText} <`);
+        terminal.createNewElement(terminal.currentFile.name, ` ${newText} <`);
     },
 
     help: () => {
@@ -216,7 +190,74 @@ const morseCommands = {
 
     codes: () => {
         for (let i in terminal.morseCode.cripted) {
-            terminal.createNewElement(` " ${i} " = '${terminal.morseCode.cripted[i]}'`);
+            terminal.createNewElement(terminal.currentFile.name, ` " ${i} " = '${terminal.morseCode.cripted[i]}'`);
         };
+    },
+}
+
+const cesarCommands = {
+
+    _isUpperCase_: (string) => {
+        return string === string.toUpperCase() && string !== string.toLowerCase();
+    },
+
+    _isLowerCase_: (string) => {
+        return string === string.toLowerCase() && string !== string.toUpperCase();
+    },
+
+    translate: (interval = 0, text = "") => {
+        interval = Math.max(-13, Math.min(interval, 13));
+
+        let translated = "";
+
+        for (i in text) {
+            const word = text[i].split("");
+
+            for (j in word) {
+                let letter = word[j];
+
+                const isUpperCase = cesarCommands._isUpperCase_(letter);
+                if (!isUpperCase) letter = letter.toUpperCase();
+
+                if (/\d/.test(letter)) {
+                    translated += letter;
+                    continue;
+                };
+
+                if (regex.test(letter)) {
+                    terminal.createNewElement(terminal.currentFile.name, W1_line);
+                    terminal.createNewElement(terminal.currentFile.name, ` NÃO USE LETRAS COM ACENTO <`);
+                    terminal.createNewElement(terminal.currentFile.name, ` LETRAS COM ACENTO NÃO PODEM SER CONVERTIDAS CORRETAMENTE <`);
+                    terminal.createNewElement(terminal.currentFile.name, ` RECOMENDA-SE USAR PALAVRAS EM INGLÊS <`);
+                    terminal.createNewElement(terminal.currentFile.name, W1_line);
+
+                    return console.warn("Não use letras com acento!");
+                };
+
+                if (!alphabet.includes(letter.toUpperCase())) {
+                    translated += letter;
+                    continue;
+                };
+
+                let position = alphabet.indexOf(letter) + interval;
+                position = ((position % 26) + 26) % 26;
+
+                let encryptedLetter = alphabet[position];
+
+                translated += !isUpperCase ? encryptedLetter.toLocaleLowerCase() : encryptedLetter;
+            };
+
+            if (i !== 0) {
+                translated += " ";
+                continue;
+            };
+
+        };
+
+        terminal.createNewElement(terminal.currentFile.name, ` ${translated} <`);
+    },
+
+    help: () => {
+        helpsHandler("default", "cesarHelp");
     },
 }
