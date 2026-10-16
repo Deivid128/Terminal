@@ -148,6 +148,7 @@ class Terminal {
         input.classList.add("writer");
         input.id = "writer";
         input.type = "text";
+        input.autocomplete = false;
 
         writerN.appendChild(span);
         writerN.appendChild(input);
